@@ -2,45 +2,26 @@
 # COMANDOS DO SIMULADOR DE CACHE
 # ============================================
 
-# 1. Gerar arquivos de trace
-python3 gen_traces.py
-# -> Gera trace_unified.bin (200k endereços uint32)
-# -> Gera trace_split.bin (200k pares tipo+endereço)
-
-
 # ============================================
 # TESTES COM CACHE UNIFICADA
 # ============================================
 
-# 2. Cache default (1024 conjuntos, bloco 4 bytes, mapeamento direto)
-python3 cache_simulator.py trace_unified.bin
-# -> Resultado: Hit Rate 1.27%
-# -> Bloco muito pequeno = pouca localidade espacial
+# 1. Cache default (1024 conjuntos, bloco 4 bytes, mapeamento direto)
+python3 cache_simulator.py cacheSimulatorInput1.bin
 
+# 2. Cache com bloco maior (1024 conjuntos, bloco 16 bytes, mapeamento direto)
+python3 cache_simulator.py 1024:16:1 cacheSimulatorInput1.bin
 
-# 3. Cache com bloco maior (1024 conjuntos, bloco 16 bytes, mapeamento direto)
-python3 cache_simulator.py 1024:16:1 trace_unified.bin
-# -> Resultado: Hit Rate 42.12%
-# -> Bloco maior aproveita melhor a localidade espacial
-
-
-# 4. Cache 4-way associativa (256 conjuntos, bloco 64 bytes, 4 vias)
-python3 cache_simulator.py 256:64:4 trace_unified.bin
-# -> Resultado: Hit Rate 80.82%
-# -> Mais associatividade = menos conflitos
-# -> Bloco grande = mais localidade espacial
+# 3. Cache 4-way associativa (256 conjuntos, bloco 64 bytes, 4 vias)
+python3 cache_simulator.py 256:64:4 cacheSimulatorInput1.bin
 
 
 # ============================================
 # TESTE COM CACHE SPLIT (iL1 + dL1)
 # ============================================
 
-# 5. Cache split: iL1 e dL1 separadas (256:16:1 cada)
-python3 cache_simulator.py 256:16:1 256:16:1 trace_split.bin
-# -> iL1 (instruções): Hit Rate 62.02%
-# -> dL1 (dados): Hit Rate 7.51%
-# -> Instruções são mais sequenciais = mais hits
-# -> Dados são mais espalhados = menos hits
+# 4. Cache split: iL1 e dL1 separadas (256:16:1 cada)
+python3 cache_simulator.py 256:16:1 256:16:1 cacheSimulatorInput2.bin
 
 
 # ============================================
