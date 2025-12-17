@@ -48,22 +48,15 @@ class Cache:
         # 2) MISS
         stats.misses += 1
 
-        # compulsorio: todas as vias invalidas neste conjunto
-        all_invalid = all(not line["valid"] for line in set_lines)
-        if all_invalid:
+        # 3) Sorteia a via target aleatoriamente
+        target_line = random.choice(set_lines)
+
+        # Classifica o tipo de miss baseado no estado da via sorteada
+        if not target_line["valid"]:
             stats.miss_compulsory += 1
         else:
             stats.miss_capacity_conflict += 1
 
-        # 3) escolhe via: primeiro via invalida, senao random
-        target_line = None
-        for line in set_lines:
-            if not line["valid"]:
-                target_line = line
-                break
-
-        if target_line is None:
-            target_line = random.choice(set_lines)
-
+        # Atualiza a cache
         target_line["valid"] = True
         target_line["tag"] = tag
